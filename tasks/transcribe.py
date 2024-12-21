@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from googleapiclient.discovery import build
 import os
@@ -35,6 +33,7 @@ def transcribe(video_id):
         # Process the transcript to remove timestamps
         cleaned_transcript = remove_timestamps(transcript)
         print(cleaned_transcript)
+        return cleaned_transcript
         # save_to_file(cleaned_transcript, f"./samples/prompt_guides/{video_id}_transcript.txt")
     except Exception as e:
         print("Failure")
@@ -106,6 +105,17 @@ def sanitize_filename(filename):
     sanitized_filename = re.sub(r'[\\/*?:"<>|]', "", filename)
     return sanitized_filename
 
-# get_vid_ids()
-transcribe("BzlNIGzN7OI")
-
+def extract_video_id(url):
+    """
+    Extract the video ID from a YouTube URL.
+    Supports standard and YouTube Live URLs.
+    """
+    patterns = [
+        r"(?:v=|/live/)([a-zA-Z0-9_-]{11})"  # Match 'v=' or '/live/' followed by 11-character video ID
+    ]
+    
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    return None

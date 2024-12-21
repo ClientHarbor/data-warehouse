@@ -1,8 +1,9 @@
 bs4
 flask
+flask-cors
+gunicorn
 google-api-python-client
 openai
-pytube
 pandas
 python-dotenv
 requests
